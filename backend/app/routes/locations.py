@@ -5,7 +5,14 @@ from fastapi import APIRouter, HTTPException
 
 router = APIRouter(prefix="/api/location", tags=["location"])
 
-DATASET_PATH = Path(__file__).resolve().parents[3] / "dataset" / "parks.csv"
+DATASET_PATH = next(
+    path
+    for path in (
+        Path(__file__).resolve().parents[3] / "dataset" / "parks.csv",
+        Path(__file__).resolve().parents[2] / "dataset" / "parks.csv",
+    )
+    if path.exists()
+)
 with DATASET_PATH.open(encoding="utf-8-sig", newline="") as dataset_file:
     DATASET = {row["Area"].strip().lower(): row for row in csv.DictReader(dataset_file)}
 

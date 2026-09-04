@@ -1,0 +1,17 @@
+[project]
+name = "park-location-api"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+	"fastapi",
+	"pydantic",
+	"email-validator",
+	"python-jose",
+	"passlib[bcrypt]",
+	"sqlalchemy",
+	"psycopg2-binary",
+	"python-dotenv",
+]
+
+[tool.vercel]
+entrypoint = "app.main:app"
