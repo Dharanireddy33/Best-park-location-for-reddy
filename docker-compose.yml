@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: park-backend
+    environment:
+      - DATABASE_URL=sqlite:///./app.db
+      - OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY}
+      - SECRET_KEY=${SECRET_KEY:-supersecret}
+      - FRONTEND_URL=http://localhost:5173
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app.db:/app/app.db
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        VITE_API_BASE_URL: http://backend:8000
+    container_name: park-frontend
+    depends_on:
+      - backend
+    ports:
+      - "5173:80"
