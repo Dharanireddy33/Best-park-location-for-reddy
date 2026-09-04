@@ -18,8 +18,13 @@ from .model import load_model
 
 models.Base.metadata.create_all(bind=engine)
 
-API_BASE_URL = os.getenv("FRONTEND_URL", "http://127.0.0.1:5173")
-origins = [API_BASE_URL, "http://localhost:5173", "http://127.0.0.1:5173"]
+configured_origins = os.getenv("FRONTEND_URL", "")
+origins = [
+    origin.strip()
+    for origin in configured_origins.split(",")
+    if origin.strip()
+]
+origins.extend(["http://localhost:5173", "http://127.0.0.1:5173"])
 
 app = FastAPI(title="Park Location Prediction API")
 app.add_middleware(
